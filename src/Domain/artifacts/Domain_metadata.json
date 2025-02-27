@@ -1,0 +1,45 @@
+{
+	"compiler": {
+		"version": "0.8.23+commit.f704f362"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"DynamicLendingRate/Domain/Domain.sol": "Domain"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"DynamicLendingRate/Domain/Domain.sol": {
+			"keccak256": "0x57fbced57795967ccc59ee824985ce6a5a1e261af63188e5f260bab1b67da61a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f02a2b1133868f5dc87c62624d714fb74ca092e64086b8ce88971fa2e6bf1e78",
+				"dweb:/ipfs/QmasJESB8ieHzJsEoNgxGnLBfNJ1mN2opJwmU8ry3XwmGw"
+			]
+		}
+	},
+	"version": 1
+}
