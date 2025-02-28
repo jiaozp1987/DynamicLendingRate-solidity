@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.23;
 import "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
+import "openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol";
 import "openzeppelin-contracts/contracts/security/ReentrancyGuard.sol";
 import {console} from "forge-std/console.sol";
 import "./Domain/Domain.sol";
 contract DynamicLendingRate is ReentrancyGuard{
+    using SafeERC20 for IERC20;
     address private owner;
     address public immutable baseERC20;  // 基准ERC20(如USDT)
     uint8 private immutable baseRate; // 基础利率
@@ -151,7 +153,7 @@ contract DynamicLendingRate is ReentrancyGuard{
         uint loanAmount_,
         uint32 duration_
     ) private returns(Domain.ReceiptDomain memory){
-        IERC20(collateralERC20_).transferFrom(msg.sender,address(this),collateralAmount_);
+        IERC20(collateralERC20_).safeTransferFrom(msg.sender,address(this),collateralAmount_);
         IERC20(loanERC20_).transfer(msg.sender,loanAmount_);
         Domain.ReceiptDomain memory _receipt = _createReceipt(
             bytes32(0),
@@ -206,7 +208,7 @@ contract DynamicLendingRate is ReentrancyGuard{
         require(block.timestamp<_receipt.deadline,"TIME OUT");
         uint _paybackAmount =  _receipt.loanAmount + _receipt.rate*(1+(block.timestamp-_receipt.startline)/1 days);
         console.log("_paybackAmount=",_paybackAmount);
-        IERC20(_receipt.loanERC20).transferFrom(msg.sender,address(this),_paybackAmount);
+        IERC20(_receipt.loanERC20).safeTransferFrom(msg.sender,address(this),_paybackAmount);
         _receipt.isActive = false;
         _updateLoan(_receipt);
         IERC20(_receipt.collateralERC20).transfer(msg.sender,_receipt.collateralAmount);
@@ -266,7 +268,7 @@ contract DynamicLendingRate is ReentrancyGuard{
         (Domain.TokenDomain memory _token, bool _reponse) = getTokensInfo(erc20_);
         require(_reponse);
         require(_token.isLoan && _token.isDeposit,"TOKEN UNACTIVE");
-        IERC20(erc20_).transferFrom(msg.sender,address(this),amount_);
+        IERC20(erc20_).safeTransferFrom(msg.sender,address(this),amount_);
         bytes32 _id = keccak256(abi.encode(
                 block.timestamp,
                 erc20_,
